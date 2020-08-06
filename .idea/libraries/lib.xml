@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/rsyntaxtextarea-3.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/antlr-runtime-4.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Ki.KD-1.0.0-beta-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Ki.Core-1.0.0-beta-1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
