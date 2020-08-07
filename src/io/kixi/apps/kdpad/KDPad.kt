@@ -2,7 +2,6 @@ package io.kixi.apps.kdpad
 
 import io.kixi.kd.KD
 import io.kixi.kd.Tag
-import io.kixi.log
 import java.awt.*
 import java.io.IOException
 import java.net.URL
