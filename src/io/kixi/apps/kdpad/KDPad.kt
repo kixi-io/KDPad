@@ -1,9 +1,10 @@
 package io.kixi.apps.kdpad
 
 import io.kixi.kd.KD
-import io.kixi.kd.Tag
-import java.awt.*
-import java.io.IOException
+import java.awt.BorderLayout
+import java.awt.EventQueue
+import java.awt.Font
+import java.awt.GraphicsEnvironment
 import java.net.URL
 import javax.swing.*
 
