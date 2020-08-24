@@ -21,13 +21,13 @@ class KDPad : JFrame() {
     var komPane = JTextPane()
 
     init {
-        setTitle("KD Pad")
+        title = "KD Pad"
 
         layoutStage()
 
         defaultCloseOperation = EXIT_ON_CLOSE
         setSize(900, 600)
-        splitter.dividerLocation=350
+        splitter.dividerLocation=390
 
         setLocationRelativeTo(null)
 
@@ -55,39 +55,26 @@ class KDPad : JFrame() {
 
         // We can't use a triple quote block because Kotlin, unlike Swift and C#, does
         // not provide a way to escape embedded trible quotes
-        codePane.text = "# Tag w/ a bare String & attribute\n\n" +
-                        "test Foo nums=[1 2 3]\n\n" +
-                        "# Swift-style String block\n\n" +
-                        "text \"\"\"\n" +
-                        "     Lorem \"ipsum\"\n" +
-                        "         dolor sit\n" +
-                        "     amet\n" +
-                        "     \"\"\"\n\n" +
-                        "# Raw string & line continuation\n\n" +
-                        "lib @\"\\libs\\KD.jar\" \\\n" +
-                        "    version=5.2-beta-5"
-
+        codePane.text = readResource("example.kd").readText()
 
         add(splitter)
 
         val toolbar = JPanel(BorderLayout())
+        toolbar.setBorder(BorderFactory.createEmptyBorder(2,2,2,2))
         val evalButton = JButton("Eval")
-        evalButton.addActionListener({
-            eval()
-        })
+        evalButton.addActionListener{ eval() }
 
         toolbar.add(evalButton, BorderLayout.EAST)
         add(toolbar, BorderLayout.NORTH)
     }
 
     private fun eval() {
-        val kdCode = codePane.text
-        komPane.text = KD.read(kdCode).toString()
+        komPane.text = KD.read(codePane.text).toString()
     }
 
     companion object {
         fun readResource(resource: String): URL =
-            this::class.java.getResource("/" + resource)
+                this::class.java.getResource("/" + resource)
     }
 }
 
