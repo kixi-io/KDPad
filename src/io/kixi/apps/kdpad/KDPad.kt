@@ -21,7 +21,7 @@ class KDPad : JFrame() {
     var komPane = JTextPane()
 
     init {
-        title = "KD Pad"
+        title = "KD Pad: sample.kd"
 
         layoutStage()
 
