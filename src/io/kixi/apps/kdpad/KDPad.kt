@@ -8,6 +8,12 @@ import java.awt.GraphicsEnvironment
 import java.net.URL
 import javax.swing.*
 
+/**
+ * KPad is a simple app that allows you to enter KD on the left, click "Eval" and see
+ * the the tag tree on the right.
+ *
+ * Coming soon: Syntax highlighting and a Kotlin REPL console on the bottom
+ */
 class KDPad : JFrame() {
 
     val splitter = JSplitPane(JSplitPane.HORIZONTAL_SPLIT)
@@ -19,13 +25,13 @@ class KDPad : JFrame() {
 
         layoutStage()
 
-        defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+        defaultCloseOperation = EXIT_ON_CLOSE
         setSize(900, 600)
         splitter.dividerLocation=350
 
         setLocationRelativeTo(null)
 
-        var ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
+        val ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
         ge.registerFont(
             Font.createFont(
                 Font.TRUETYPE_FONT,
@@ -64,8 +70,8 @@ class KDPad : JFrame() {
 
         add(splitter)
 
-        var toolbar = JPanel(BorderLayout())
-        var evalButton = JButton("Eval")
+        val toolbar = JPanel(BorderLayout())
+        val evalButton = JButton("Eval")
         evalButton.addActionListener({
             eval()
         })
@@ -75,7 +81,7 @@ class KDPad : JFrame() {
     }
 
     private fun eval() {
-        var kdCode = codePane.text
+        val kdCode = codePane.text
         komPane.text = KD.read(kdCode).toString()
     }
 
