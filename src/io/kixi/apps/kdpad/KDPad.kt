@@ -19,12 +19,13 @@ class KDPad : JFrame() {
     val codeSplitter = JSplitPane(JSplitPane.HORIZONTAL_SPLIT)
     val windowSplitter = JSplitPane(JSplitPane.VERTICAL_SPLIT)
 
-    var codePane = JTextPane()
-    var komPane = JTextPane()
+    var codePane = CodePane()
+    var komPane = CodePane()
     var outputArea = OutputArea()
 
     init {
         title = "KD Pad: sample.kd"
+        komPane.isEditable = false
 
         layoutStage()
 

@@ -13,6 +13,7 @@ import javax.swing.text.StyleConstants
 
 
 class OutputArea : JPanel() {
+
     companion object {
         private val OUT_STYLE = SimpleAttributeSet()
         private val ERR_STYLE = SimpleAttributeSet()
@@ -37,7 +38,7 @@ class OutputArea : JPanel() {
         textPane!!.text = ""
     }
 
-    inner class CustomOutputStream(var attributeSet: SimpleAttributeSet) : OutputStream() {
+    inner class StyledOutputStream(var attributeSet: SimpleAttributeSet) : OutputStream() {
         @Throws(IOException::class)
         override fun write(b: Int) {
             SwingUtilities.invokeLater {
@@ -60,7 +61,7 @@ class OutputArea : JPanel() {
         // textPane.setFont(sourceCodePro);
         setLayout(BorderLayout())
         add(scrollPane)
-        outStream = PrintStream(CustomOutputStream(OUT_STYLE))
-        errStream = PrintStream(CustomOutputStream(ERR_STYLE))
+        outStream = PrintStream(StyledOutputStream(OUT_STYLE))
+        errStream = PrintStream(StyledOutputStream(ERR_STYLE))
     }
 }
