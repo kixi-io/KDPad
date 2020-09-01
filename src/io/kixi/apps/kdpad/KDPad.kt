@@ -16,9 +16,12 @@ import javax.swing.*
  */
 class KDPad : JFrame() {
 
-    val splitter = JSplitPane(JSplitPane.HORIZONTAL_SPLIT)
+    val codeSplitter = JSplitPane(JSplitPane.HORIZONTAL_SPLIT)
+    val windowSplitter = JSplitPane(JSplitPane.VERTICAL_SPLIT)
+
     var codePane = JTextPane()
     var komPane = JTextPane()
+    var outputArea = OutputArea()
 
     init {
         title = "KD Pad: sample.kd"
@@ -27,7 +30,11 @@ class KDPad : JFrame() {
 
         defaultCloseOperation = EXIT_ON_CLOSE
         setSize(900, 600)
-        splitter.dividerLocation=390
+        codeSplitter.dividerLocation=390
+        windowSplitter.dividerLocation=480
+
+        System.setOut(outputArea.outStream)
+        System.setErr(outputArea.errStream)
 
         setLocationRelativeTo(null)
 
@@ -42,22 +49,30 @@ class KDPad : JFrame() {
 
         codePane.font = font
         komPane.font = font
+        outputArea.font = font
     }
 
     private fun layoutStage() {
         val codeScroller = JScrollPane(codePane)
         codeScroller.border = null
+
         val komScroller = JScrollPane(komPane)
         komScroller.border = null
 
-        splitter.leftComponent = codeScroller
-        splitter.rightComponent = komScroller
+        codeSplitter.leftComponent = codeScroller
+        codeSplitter.rightComponent = komScroller
+
+        val outputScroller = JScrollPane(outputArea)
+        outputScroller.border = null
+
+        windowSplitter.topComponent = codeSplitter
+        windowSplitter.bottomComponent = outputScroller
 
         // We can't use a triple quote block because Kotlin, unlike Swift and C#, does
         // not provide a way to escape embedded trible quotes
         codePane.text = readResource("example.kd").readText()
 
-        add(splitter)
+        add(windowSplitter)
 
         val toolbar = JPanel(BorderLayout())
         toolbar.setBorder(BorderFactory.createEmptyBorder(2,2,2,2))
@@ -69,7 +84,11 @@ class KDPad : JFrame() {
     }
 
     private fun eval() {
-        komPane.text = KD.read(codePane.text).toString()
+        try {
+            komPane.text = KD.read(codePane.text).toString()
+        } catch(e: Throwable) {
+            e.printStackTrace(outputArea.errStream)
+        }
     }
 
     companion object {
