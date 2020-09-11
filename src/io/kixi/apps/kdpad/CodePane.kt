@@ -1,13 +1,14 @@
 package io.kixi.apps.kdpad
 
 import io.kixi.kd.antlr.KDLexer
+import io.kixi.kd.antlr.KDParser
 import org.antlr.v4.runtime.CharStreams
+import org.antlr.v4.runtime.Token
 import java.awt.Color
 import javax.swing.JTextPane
 import javax.swing.SwingUtilities
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
-// import javax.swing.text.SimpleAttributeSet
 import javax.swing.text.Style
 import javax.swing.text.StyleConstants
 
@@ -25,6 +26,7 @@ class CodePane : JTextPane() {
         val DARK_RED = Color(168, 30, 44)
         val DARK_GOLD = Color(168, 146, 49)
         val DARK_BLUE = Color(58, 144, 182)
+        val DARK_BLUE_PURPLE = Color(90, 115, 170)
         val DARK_PURPLE = Color(134, 95, 157)
         val DARK_CHARTREUSE = Color(109, 148, 61)
         val DARK_GREEN = Color(54, 145, 82)
@@ -34,7 +36,9 @@ class CodePane : JTextPane() {
     // instance of the text component
     // TODO: refactor
     val ID = makeStyle("ID")
-    var STRING = makeStyle("string", DARK_GREEN)
+    val TAG_NAME = makeStyle("TAG_NAME", DARK_BLUE_PURPLE, bold=true)
+    var STRING = makeStyle("STRING", DARK_GREEN)
+    var ATTRIBUTE_KEY = makeStyle("ATTRIBUTE_KEY", DARK_PURPLE, false, true)
     var BRACKET_PAREN = makeStyle("BRACKET_PAREN", DARK_PURPLE, true)
     var NUMBER = makeStyle("NUMBER", DARK_BLUE)
     val VERSION =  makeStyle("VERSION", DARK_CHARTREUSE)
@@ -57,10 +61,10 @@ class CodePane : JTextPane() {
     fun makeStyle(name: String, color: Color? = null, bold: Boolean = false, italic: Boolean = false) : Style {
         val style = addStyle(name, defaultStyle)
         if(color!=null)
-            StyleConstants.setForeground(style, color);
+            StyleConstants.setForeground(style, color)
 
         if(bold) StyleConstants.setBold(style, true)
-        if(italic) StyleConstants.setBold(style, true)
+        if(italic) StyleConstants.setItalic(style, true)
 
         return style
     }
@@ -79,7 +83,7 @@ class CodePane : JTextPane() {
         KDLexer.LSQUARE, KDLexer.RSQUARE -> BRACKET_PAREN
         KDLexer.URL, KDLexer.DecimalQuantityLiteral, KDLexer.IntegerQuantityLiteral -> LITERAL_ALT
         KDLexer.Version -> VERSION
-        KDLexer.Date, KDLexer.TimeZone, KDLexer.CompoundDuration, KDLexer.NanosecondDuration,
+        KDLexer.Date, KDLexer.CompoundDuration, KDLexer.NanosecondDuration,
         KDLexer.MillisecondDuration, KDLexer.SecondDuration, KDLexer.MinuteDuration, KDLexer.HourDuration,
         KDLexer.DayDuration -> DATE_TIME
         KDLexer.Time -> TIME
@@ -89,25 +93,49 @@ class CodePane : JTextPane() {
         KDLexer.ExclusiveLeftOp, KDLexer.ExclusiveRightOp -> SYMBOL_OP // TODO: Change name
         KDLexer.LineComment -> COMMENT
         KDLexer.BlockComment -> COMMENT
-        KDLexer.WHITESPACE, KDLexer.WS -> defaultStyle
+        KDLexer.WS -> defaultStyle
             else -> ERROR
     }
 
-    fun colorize(lexer: KDLexer) {
-        var vocab = lexer.vocabulary
-        var doc = styledDocument
 
-        var tokens = lexer.allTokens
+    fun colorize(lexer: KDLexer) {
+        val doc = styledDocument
+
+        val tokens = lexer.allTokens
+
+        var lastToken: Token = tokens.get(KDParser.WS)
         for(token in tokens) {
             val doHighlight = Runnable {
-                doc.setCharacterAttributes(token.startIndex, token.text.length, getStyle(token.type), true)
+
+                var style = getStyle(token.type)
+
+                // Handle annotations
+                if(lastToken.type == KDLexer.AT && token.type == KDLexer.ID) {
+                    style = getStyle(lastToken.type)
+
+                // Handle tag name
+                } else if((lastToken.type == KDLexer.NL || lastToken.type ==  KDLexer.SEMICOLON)
+                        &&  token.type == KDLexer.ID) {
+                    style = TAG_NAME
+                }
+
+                doc.setCharacterAttributes(token.startIndex, token.text.length, style, true)
+
+                // handle attribute key
+                if(token.type == KDLexer.EQUALS && lastToken.type == KDLexer.ID) {
+                    doc.setCharacterAttributes(lastToken.startIndex, lastToken.text.length, ATTRIBUTE_KEY, true)
+                }
+
+                if(token.type!=KDLexer.WS) {
+                    lastToken = token
+                }
+
             }
             SwingUtilities.invokeLater(doHighlight)
         }
     }
 
     inner class KDDocumentListener() : DocumentListener {
-        var newline = "\n"
         override fun insertUpdate(e: DocumentEvent) {
             updateLog(e, "inserted into")
         }
@@ -120,7 +148,7 @@ class CodePane : JTextPane() {
             //Plain text components do not fire these events
         }
 
-        fun updateLog(e: DocumentEvent, action: String) {
+        private fun updateLog(e: DocumentEvent, action: String) {
             // val doc: Document = e.getDocument() as Document
             // val changeLength: Int = e.getLength()
             colorize(KDLexer(CharStreams.fromString(text)))
