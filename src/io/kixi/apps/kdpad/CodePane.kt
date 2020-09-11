@@ -49,7 +49,7 @@ class CodePane : JTextPane() {
     val ANNOTATION = makeStyle("ANNOTATION", DARK_GOLD, true)
     val SYMBOL_OP = makeStyle("SYMBOL_OP", Color.GRAY, true)
     val ERROR = makeStyle("ERROR", DARK_RED)
-    val COMMENT = makeStyle("LINE_COMMENT", Color.GRAY)
+    val COMMENT = makeStyle("LINE_COMMENT", Color.GRAY, italic = true)
 
     init {
         defaultStyle =  this.makeStyle("DEFAULT")
