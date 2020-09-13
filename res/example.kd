@@ -1,14 +1,14 @@
 # Tag w/ a bare String & attribute
-someTags random_nonsense = true {
-    test Odd nums = [1 3 5]
+@log @test
+someTags random_nonsense=true {
+    test Odd nums=[1 3 5]
     values 1 true 日本語
     range 5.0.2-beta-2 .. 6.1-RC
     now 2020/8/24@5:30:12.630_631_735
     wait 2h..4h
     length 8mm..2cm
+    "I'm an anonymous tag" # No name!
 }
-
-"I'm an anonymous tag" # No name!
 
 /**
  * Swift-style String block
@@ -25,6 +25,7 @@ text """
 lib @"\libs\KD.jar" \
     version=5.2-beta-5
 
+@math
 prime matrix {
   1  3  5
   7  11 13

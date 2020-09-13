@@ -23,30 +23,33 @@ class CodePane : JTextPane() {
     val defaultStyle: Style
 
     companion object {
-        val DARK_RED = Color(168, 30, 44)
+        val DARK_PURPLE = Color(132, 95, 155)
+        val DARK_PERIWINKLE = Color(90, 115, 170)
+        val DARK_BLUE = Color(62, 142, 180)
+        val DARK_AQUA = Color(53, 141, 136)
+        val DARK_GREEN = Color(55, 146, 76)
+        val DARK_CHARTREUSE = Color(119, 138, 61)
         val DARK_GOLD = Color(168, 146, 49)
-        val DARK_BLUE = Color(58, 144, 182)
-        val DARK_BLUE_PURPLE = Color(90, 115, 170)
-        val DARK_PURPLE = Color(134, 95, 157)
-        val DARK_CHARTREUSE = Color(109, 148, 61)
-        val DARK_GREEN = Color(54, 145, 82)
+        val DARK_ORANGE = Color(168, 92, 47)
+        val DARK_RED = Color(168, 30, 44)
     }
 
     // This should all be in the companion object but makeStyle needs a reference to an
     // instance of the text component
     // TODO: refactor
     val ID = makeStyle("ID")
-    val TAG_NAME = makeStyle("TAG_NAME", DARK_BLUE_PURPLE, bold=true)
+    val TAG_NAME = makeStyle("TAG_NAME", DARK_PERIWINKLE)
     var STRING = makeStyle("STRING", DARK_GREEN)
     var ATTRIBUTE_KEY = makeStyle("ATTRIBUTE_KEY", DARK_PURPLE, false, true)
     var BRACKET_PAREN = makeStyle("BRACKET_PAREN", DARK_PURPLE, true)
-    var NUMBER = makeStyle("NUMBER", DARK_BLUE)
+    var NUMBER = makeStyle("NUMBER", DARK_AQUA) // DARK_BLUE)
     val VERSION =  makeStyle("VERSION", DARK_CHARTREUSE)
-    val LITERAL =  makeStyle("LITERAL", Color.DARK_GRAY, true)
+    // val LITERAL =  makeStyle("LITERAL", Color.DARK_GRAY, true)
+    val LITERAL =  makeStyle("LITERAL", DARK_ORANGE)
     val LITERAL_ALT =  makeStyle("LITERAL_ALT", DARK_PURPLE)
     val DATE_TIME =  makeStyle("DATE_TIME", DARK_PURPLE)
-    val TIME = makeStyle("TIME", DARK_GOLD)
-    val ANNOTATION = makeStyle("ANNOTATION", DARK_GOLD, true)
+    val TIME = makeStyle("TIME", DARK_AQUA)
+    val ANNOTATION = makeStyle("ANNOTATION", DARK_GOLD)
     val SYMBOL_OP = makeStyle("SYMBOL_OP", Color.GRAY, true)
     val ERROR = makeStyle("ERROR", DARK_RED)
     val COMMENT = makeStyle("LINE_COMMENT", Color.GRAY, italic = true)
