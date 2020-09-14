@@ -37,7 +37,7 @@ class CodePane : JTextPane() {
     // This should all be in the companion object but makeStyle needs a reference to an
     // instance of the text component
     // TODO: refactor
-    val ID = makeStyle("ID")
+    val ID = makeStyle("ID", Color(41, 81, 120))
     val TAG_NAME = makeStyle("TAG_NAME", DARK_PERIWINKLE)
     var STRING = makeStyle("STRING", DARK_GREEN)
     var ATTRIBUTE_KEY = makeStyle("ATTRIBUTE_KEY", DARK_PURPLE, false, true)
@@ -48,7 +48,7 @@ class CodePane : JTextPane() {
     val LITERAL =  makeStyle("LITERAL", DARK_ORANGE)
     val LITERAL_ALT =  makeStyle("LITERAL_ALT", DARK_PURPLE)
     val DATE_TIME =  makeStyle("DATE_TIME", DARK_PURPLE)
-    val TIME = makeStyle("TIME", DARK_AQUA)
+    val TIME = makeStyle("TIME", DARK_GOLD)
     val ANNOTATION = makeStyle("ANNOTATION", DARK_GOLD)
     val SYMBOL_OP = makeStyle("SYMBOL_OP", Color.GRAY, true)
     val ERROR = makeStyle("ERROR", DARK_RED)
